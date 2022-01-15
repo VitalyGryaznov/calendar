@@ -1,0 +1,18 @@
+.content {
+    &_container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    &_flex {
+      padding: 30px 50px 50px 30px;
+      width: 1120px;
+      display: flex;
+      flex-direction: column;
+    }
+    &_add_button {
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
