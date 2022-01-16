@@ -10,15 +10,18 @@ import {
   getDaysFromTheNextMonthAtTheLastWeekOfTheCurrentMonth,
 } from "../../utils/dateUtils";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
-import { selectYear, selectMonth } from "../../redux/Slice";
+import { selectYear, selectMonth, setSelectedReminder } from "../../redux/Slice";
 import { getReminders } from "../../api/remindersApi";
 import { useQuery } from "react-query";
 import CircularProgress from "@mui/material/CircularProgress";
 import { DayAndRemindeer, ReminderType } from "../../types";
 
+
 function Calendar() {
+    const dispatch = useAppDispatch();
   const selectedMonth = useAppSelector(selectMonth);
   const selectedYear = useAppSelector(selectYear);
+  
 
   const daysInCurrentMonth = getDaysFromTheCurrentMonth(
     selectedYear,
@@ -52,17 +55,18 @@ function Calendar() {
     if (isError) {
       return <div>Something went wrong</div>;
     }
+    //.map((reminder: any) => { return {...reminder, date: dayjs(reminder.date, "YYYY-MM-DDTHH:mm:ss")}})
 
     const addremindersToDatesList = (
-      daysList: Array<Dayjs>
+      daysList: Array<string>
     ): Array<DayAndRemindeer> => {
       return daysList.map((day) => {
         return {
           day: day,
           reminders: data?.filter(
             (reminder: any) =>
-              reminder.date.substring(0, 10) === day.format("YYYY-MM-DD")
-          ).map((reminder: any) => { return {...reminder, date: dayjs(reminder.date, "YYYY-MM-DDTHH:mm:ss")}})
+              reminder.date.substring(0, 10) === day
+          )
         };
       });
     };
@@ -75,13 +79,15 @@ function Calendar() {
     const daysAndRemindersInTheLastWeekAfterTheLastDay =
       addremindersToDatesList(daysInTheLastWeekAfterTheLastDay);
 
+      
+
     return (
       <ol className="day-grid">
         {daysAndRemindersInTheWeekBeforeTheFirst.map((dayAndReminders) => (
           <CalendarDay
             className="month=prev"
             day={dayAndReminders.day}
-            key={dayAndReminders.day.format("DDMM")}
+            key={dayAndReminders.day}
             reminders={dayAndReminders.reminders}
           ></CalendarDay>
         ))}
@@ -89,14 +95,14 @@ function Calendar() {
           <CalendarDay
             day={dayAndReminders.day}
             reminders={dayAndReminders.reminders}
-            key={dayAndReminders.day.format("DDMM")}
+            key={dayAndReminders.day}
           ></CalendarDay>
         ))}
         {daysAndRemindersInTheLastWeekAfterTheLastDay.map((dayAndReminders) => (
           <CalendarDay
             className="month=prev"
             day={dayAndReminders.day}
-            key={dayAndReminders.day.format("DDMM")}
+            key={dayAndReminders.day}
             reminders={dayAndReminders.reminders}
           ></CalendarDay>
         ))}

@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { ReminderType } from "../../types";
-import dayjs from "dayjs";
+import { ReminderType, calendarDateFormat, reminderDateFormat } from "../../types";
+import dayjs, { Dayjs } from "dayjs";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
-import { selectYear, selectMonth, selectReminder, selectShowReminderModal, closeReminderModal, incrementMonth } from "../../redux/Slice";
+import { selectYear, selectMonth, selectReminder, selectShowReminderModal, closeReminderModal, selectDay, setSelectedDate } from "../../redux/Slice";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -15,6 +15,8 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import { useForm } from "react-hook-form";
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { updateReminder, addReminder, deleteReminder } from "../../api/remindersApi";
+import { useMutation, useQueryClient } from "react-query";
 
 interface CollectionCreateFormProps {
   onCreate: (payload: any) => void;
@@ -23,30 +25,64 @@ interface CollectionCreateFormProps {
 
 const ModalDialog: React.FC<CollectionCreateFormProps> = ({ onCreate }) => {
 
+    
+
     const { register, handleSubmit, formState: { errors } } = useForm();
   
   const initialReminderState: ReminderType = {
     id: 0,
     name: "",
-    date: dayjs(),
+    date: dayjs().format(calendarDateFormat),
   };
   const [reminder, setReminder] = useState(initialReminderState);
   const selectedMonth = useAppSelector(selectMonth);
   const selectedYear = useAppSelector(selectYear);
   const selectedReminder = useAppSelector(selectReminder);
+  const selectedDay = useAppSelector(selectDay);
   const showModal = useAppSelector(selectShowReminderModal);
+
+  
+
+  
 
   const dispatch = useAppDispatch();
 
+  const queryClient = useQueryClient()
+  const updateMutation = useMutation(updateReminder, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([    "reminders"
+      ])
+    },
+  });
+  const addMutation = useMutation(addReminder, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([    "reminders"
+      ])
+    },
+  });
+  const deleteMutation = useMutation(deleteReminder, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([    "reminders"
+      ])
+    },
+  });
 
-  /*useEffect(() => {
+  useEffect(() => {
     setReminder(
         selectedReminder === null
         ? 
-        initialReminderState
+        
+        {...initialReminderState, date: dayjs(selectedDay, calendarDateFormat).format(reminderDateFormat)}
         : selectedReminder
     );
-  }, [showModal]);*/
+  }, [selectedReminder, selectedDay]);
+
+ 
+
+  /*useEffect(() => {
+  
+    setDate(selectedReminder ? dayjs(selectedReminder?.date, calendarDateFormat): dayjs())
+  },[selectedReminder]);*/
 
   /*useEffect(() => { ??? post isntead
     form.setFieldsValue({
@@ -58,33 +94,50 @@ const ModalDialog: React.FC<CollectionCreateFormProps> = ({ onCreate }) => {
   }, [user]);
   */
 
-  const onCancel = () => { dispatch(closeReminderModal) };
+  
 
 
-  const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
-    setOpen(false);
+    dispatch(setSelectedDate(null));
+    dispatch(closeReminderModal());
   };
 
-  const [value, setValue] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54'),
-  );
+  const handelDelete = () => {
+ 
+    deleteMutation.mutate(selectedReminder!.id);
+    dispatch(closeReminderModal());
+  }
+
+  const onSuccessSubmit = () => {
+    
+      if (selectedReminder === null) {
+          console.log("Adding");
+        addMutation.mutate(reminder);
+
+      } else {
+          updateMutation.mutate(reminder);
+      }
+      dispatch(closeReminderModal());
+  }
+
+
+
+
+
+
 
  
 
   return (
     <div>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
+   
+      <Dialog open={showModal} onClose={handleClose}>
         <DialogTitle>Subscribe</DialogTitle>
+        {selectedReminder? <button onClick={handelDelete}>delete</button>: null}
+        
         <DialogContent>
           <DialogContentText>
             To subscribe to this website, please enter your email address here. We
@@ -93,6 +146,10 @@ const ModalDialog: React.FC<CollectionCreateFormProps> = ({ onCreate }) => {
           <TextField
             {...register("first", {required: true, maxLength: 30})}
             autoFocus
+            value={reminder.name}
+            onChange={(newName) => {
+                setReminder({...reminder, name: newName.target.value});
+              }}
             margin="dense"
             id="name"
             label="Email Address"
@@ -104,9 +161,9 @@ const ModalDialog: React.FC<CollectionCreateFormProps> = ({ onCreate }) => {
           <DateTimePicker
           {...register("time", {required: true})}
           renderInput={(params) => <TextField {...params} />}
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
+          value={dayjs(reminder?.date, calendarDateFormat)}
+          onChange={(newDate) => {
+            setReminder({...reminder, date: dayjs(newDate).format(reminderDateFormat)});
           }}
         />
         
@@ -114,7 +171,7 @@ const ModalDialog: React.FC<CollectionCreateFormProps> = ({ onCreate }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit((data)=> alert(JSON.stringify(data)))}>Subscribe</Button>
+          <Button onClick={handleSubmit(()=> onSuccessSubmit())}>Subscribe</Button>
         </DialogActions>
       </Dialog>
       </LocalizationProvider>

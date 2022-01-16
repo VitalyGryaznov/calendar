@@ -1,6 +1,10 @@
 import { Dayjs } from "dayjs";
 
-export interface CalendarState {
+export const reminderDateFormat = "YYYY-MM-DDTHH:mm:ss";
+
+export const calendarDateFormat = "YYYY-MM-DD";
+
+export interface CalendarStateType {
     selectedDay: Dayjs | null;
     selectedReminder: ReminderType | null;
     selectedMonth: number;
@@ -11,10 +15,10 @@ export interface CalendarState {
 export interface ReminderType {
     id: number;
     name: string;
-    date: Dayjs;
+    date: string;
 }
 
 export interface DayAndRemindeer {
-    day: Dayjs;
+    day: string;
     reminders: Array<ReminderType>
 }
