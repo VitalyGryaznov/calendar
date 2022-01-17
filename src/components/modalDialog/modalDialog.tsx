@@ -122,7 +122,11 @@ const ModalDialog = () => {
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Dialog open={showModal} onClose={handleClose}>
+        <Dialog
+          open={showModal}
+          onClose={handleClose}
+          data-testid="modal-dialog"
+        >
           <DialogTitle className="modal_title">
             {selectedReminder ? (
               <>
@@ -130,6 +134,7 @@ const ModalDialog = () => {
                   aria-label="delete"
                   color="primary"
                   onClick={handelDelete}
+                  data-testid="modal-dialog_delete-button"
                 >
                   <DeleteForeverOutlinedIcon />
                 </IconButton>
@@ -137,6 +142,7 @@ const ModalDialog = () => {
                   aria-label="edit"
                   color="primary"
                   onClick={() => setShowEditMode(true)}
+                  data-testid="modal-dialog_edit-button"
                 >
                   <EditOutlinedIcon />
                 </IconButton>
@@ -146,6 +152,7 @@ const ModalDialog = () => {
               aria-label="close"
               color="primary"
               onClick={handleClose}
+              data-testid="modal-dialog_close-button"
             >
               <CloseOutlinedIcon />
             </IconButton>
@@ -154,7 +161,10 @@ const ModalDialog = () => {
           <DialogContent>
             {showEditMode ? null : (
               <div className="modal_reminderDescription">
-                <div className="modal_reminderDescriptionTitle">
+                <div
+                  className="modal_reminderDescriptionTitle"
+                  data-testid="modal-dialog_reminder-name"
+                >
                   {reminder.name}
                 </div>
                 <div>
