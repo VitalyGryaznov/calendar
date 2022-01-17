@@ -69,7 +69,7 @@ function Calendar() {
       <ol className="day-grid">
         {daysAndRemindersInTheWeekBeforeTheFirst.map((dayAndReminders) => (
           <CalendarDay
-            className="month=prev"
+            dayFromCurrentMonth={false}
             day={dayAndReminders.day}
             key={dayAndReminders.day}
             reminders={dayAndReminders.reminders}
@@ -77,6 +77,7 @@ function Calendar() {
         ))}
         {daysAndRemindersInCurrentMonth.map((dayAndReminders) => (
           <CalendarDay
+            dayFromCurrentMonth={true}
             day={dayAndReminders.day}
             reminders={dayAndReminders.reminders}
             key={dayAndReminders.day}
@@ -84,7 +85,7 @@ function Calendar() {
         ))}
         {daysAndRemindersInTheLastWeekAfterTheLastDay.map((dayAndReminders) => (
           <CalendarDay
-            className="month=prev"
+            dayFromCurrentMonth={false}
             day={dayAndReminders.day}
             key={dayAndReminders.day}
             reminders={dayAndReminders.reminders}

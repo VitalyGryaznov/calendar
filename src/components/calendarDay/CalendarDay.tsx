@@ -11,7 +11,7 @@ import {
 import "./CalendarDay.scss";
 
 function CalendarDay(props: any) {
-  let isDayActive = "day-activeDay";
+  let dayFromCurrentMonth = props.dayFromCurrentMonth ? "": "day-inactive";
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
@@ -21,14 +21,12 @@ function CalendarDay(props: any) {
   };
 
   return (
-    <li onClick={handleClick} className="day">
-      <div className={`day_header ${isDayActive}`}>
+    <li onClick={handleClick} className={`day ${dayFromCurrentMonth}`}>
+      <div className="day_header" >
         {dayjs(props.day, calendarDateFormat).date()}
       </div>
       {props.reminders.map((reminder: ReminderType) => (
-        <Reminder key={reminder.name + reminder.date} reminder={reminder}>
-          {" "}
-        </Reminder>
+        <Reminder key={reminder.name + reminder.date} reminder={reminder}/>
       ))}
     </li>
   );

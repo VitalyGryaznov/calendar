@@ -5,6 +5,9 @@
   &_header {
     font-size: 15px;
   }
+  &-inactive {
+      background-color: rgba(194, 190, 190, 0.116);
+  }
 }
 .day:hover {
   cursor: pointer;

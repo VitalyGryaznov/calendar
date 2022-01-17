@@ -1,19 +1,29 @@
 {
   "reminders": [
     {
-      "id": 1,
-      "name": "time15:00",
-      "date": "2022-01-01T15:00:00"
-    },
-    {
       "id": 2,
-      "name": "time:16",
+      "name": "Important meeting",
       "date": "2022-02-01T16:00:00"
     },
     {
-      "id": 3,
-      "name": "2021-12-31",
-      "date": "2021-12-31T16:00:00"
+      "id": 8,
+      "name": "Another meeting",
+      "date": "2022-01-16"
+    },
+    {
+      "id": 9,
+      "name": "Other stuff",
+      "date": "2022-01-13T08:00:00"
+    },
+    {
+      "id": 11,
+      "name": "Another reminder",
+      "date": "2022-03-02T00:00:00"
+    },
+    {
+      "id": 12,
+      "name": "Daily",
+      "date": "2022-01-01T10:00:00"
     }
   ]
 }

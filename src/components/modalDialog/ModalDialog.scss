@@ -1,0 +1,14 @@
+.modal {
+    &_title {
+        display: flex;
+        justify-content: flex-end;
+    }
+    &_reminderDescriptionTitle {
+        font-size: 25px;
+        padding-bottom: 10px;
+    }
+}
+
+.MuiPaper-root {
+    min-width: 400px;
+}
