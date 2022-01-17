@@ -12,7 +12,7 @@ import { selectYear, selectMonth } from "../../redux/Slice";
 import { getReminders } from "../../api/remindersApi";
 import { useQuery } from "react-query";
 import CircularProgress from "@mui/material/CircularProgress";
-import { DayAndRemindeer } from "../../types";
+import { DayAndRemindeer, reminderDateFormat, ReminderType } from "../../types";
 
 function Calendar() {
   const selectedMonth = useAppSelector(selectMonth);
@@ -44,15 +44,30 @@ function Calendar() {
       return <div>Something went wrong</div>;
     }
 
+    function compareRemindersByDate(reminder1: ReminderType, reminder2: ReminderType) {
+      const reminder1DateParsed = dayjs(reminder1.date, reminderDateFormat);
+      const reminder2DateParsed = dayjs(reminder2.date, reminderDateFormat);
+
+      if (reminder1DateParsed.isBefore(reminder2DateParsed)) {
+        return -1;
+      }
+      if (reminder1DateParsed.isAfter(reminder2DateParsed)) {
+        return 1;
+      }
+      return 0;
+    }
+
     const addremindersToDatesList = (
       daysList: Array<string>
     ): Array<DayAndRemindeer> => {
       return daysList.map((day) => {
         return {
           day: day,
-          reminders: data?.filter(
-            (reminder: any) => reminder.date.substring(0, 10) === day
-          ),
+          reminders: data
+            ?.filter(
+              (reminder: ReminderType) => reminder.date.substring(0, 10) === day
+            )
+            .sort(compareRemindersByDate),
         };
       });
     };

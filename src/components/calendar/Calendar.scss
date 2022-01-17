@@ -26,8 +26,7 @@ ul.weekdays li {
 
 ol.day-grid li {
   border: 1px solid #eaeaea;
-  height: 12vw;
-  max-height: 125px;
+  min-height: 8vw;
 }
 
 ul.weekdays abbr[title] {
@@ -48,7 +47,6 @@ ul.weekdays abbr[title] {
 
   ul.weekdays > li abbr:after {
     content: attr(title);
-
     text-align: center;
   }
 }
