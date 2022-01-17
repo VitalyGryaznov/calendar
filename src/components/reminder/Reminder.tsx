@@ -16,7 +16,7 @@ function Reminder(props: any) {
   return (
     <div className="reminder_container">
       <div className="reminder_content" onClick={handleSelect}>
-        {`${dayjs(props.reminder.date, reminderDateFormat).format("h:m A")} ${
+        {`${dayjs(props.reminder.date, reminderDateFormat).format("h:mm A")} ${
           props.reminder.name
         }`}
       </div>
