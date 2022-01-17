@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from './store';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState, AppThunk } from "./store";
 import dayjs, { Dayjs } from "dayjs";
 import { CalendarStateType, ReminderType } from "../types";
 
@@ -12,7 +12,7 @@ const initialState: CalendarStateType = {
 };
 
 export const calendarSlice = createSlice({
-  name: 'calendar',
+  name: "calendar",
   initialState,
   reducers: {
     incrementMonth: (state) => {
@@ -22,27 +22,39 @@ export const calendarSlice = createSlice({
       state.selectedMonth -= 1;
     },
     setSelectedDate: (state, action: PayloadAction<Dayjs | null>) => {
-        state.selectedDay = action.payload;
+      state.selectedDay = action.payload;
     },
-    setSelectedReminder: (state, action: PayloadAction<ReminderType | null>) => {
-        console.log(action.payload);
-        state.selectedReminder = action.payload;
+    setSelectedReminder: (
+      state,
+      action: PayloadAction<ReminderType | null>
+    ) => {
+      console.log(action.payload);
+      state.selectedReminder = action.payload;
     },
     closeReminderModal: (state) => {
-        state.showReminderModal = false;
+      state.showReminderModal = false;
     },
     openReminderModal: (state) => {
-        state.showReminderModal = true;
+      state.showReminderModal = true;
     },
   },
 });
 
-export const { incrementMonth, decrementMonth, setSelectedDate, closeReminderModal, setSelectedReminder, openReminderModal } = calendarSlice.actions;
+export const {
+  incrementMonth,
+  decrementMonth,
+  setSelectedDate,
+  closeReminderModal,
+  setSelectedReminder,
+  openReminderModal,
+} = calendarSlice.actions;
 
 export const selectMonth = (state: RootState) => state.calendar.selectedMonth;
 export const selectYear = (state: RootState) => state.calendar.selectedYear;
-export const selectReminder = (state: RootState) => state.calendar.selectedReminder;
-export const selectShowReminderModal = (state: RootState) => state.calendar.showReminderModal;
+export const selectReminder = (state: RootState) =>
+  state.calendar.selectedReminder;
+export const selectShowReminderModal = (state: RootState) =>
+  state.calendar.showReminderModal;
 export const selectDay = (state: RootState) => state.calendar.selectedDay;
 
 export default calendarSlice.reducer;

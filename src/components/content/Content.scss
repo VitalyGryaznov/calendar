@@ -1,18 +1,23 @@
+$mediaMaxWidth: 1260px;
+$mediaBp1Width: 960px;
+$mediaMinWidth: 480px;
+
 .content {
+  &_container {
+    width: 1200px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
+
+@media all and (max-width: $mediaMaxWidth) {
+  .content {
     &_container {
-      width: 100%;
+      width: 90%;
       display: flex;
       justify-content: center;
-    }
-    &_flex {
-      padding: 30px 50px 50px 30px;
-      width: 1120px;
-      display: flex;
       flex-direction: column;
     }
-    &_add_button {
-      padding-bottom: 10px;
-      display: flex;
-      justify-content: flex-end;
-    }
   }
+}

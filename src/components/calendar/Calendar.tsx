@@ -1,27 +1,22 @@
-import React, { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import "./Calendar.scss";
 import CalendarDay from "../calendarDay/CalendarDay";
-import ModalDialog from "../modalDialog/modalDialog";
-import CalendarNavigation from "../calendarNavigation/CalendarNavigation";
+
 import {
   getDaysFromTheCurrentMonth,
   getDaysFromThePreviousMonthAtTheFirstWeekOfTheCurrentMonth,
   getDaysFromTheNextMonthAtTheLastWeekOfTheCurrentMonth,
 } from "../../utils/dateUtils";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
-import { selectYear, selectMonth, setSelectedReminder } from "../../redux/Slice";
+import { selectYear, selectMonth } from "../../redux/Slice";
 import { getReminders } from "../../api/remindersApi";
 import { useQuery } from "react-query";
 import CircularProgress from "@mui/material/CircularProgress";
-import { DayAndRemindeer, ReminderType } from "../../types";
-
+import { DayAndRemindeer } from "../../types";
 
 function Calendar() {
-    const dispatch = useAppDispatch();
   const selectedMonth = useAppSelector(selectMonth);
   const selectedYear = useAppSelector(selectYear);
-  
 
   const daysInCurrentMonth = getDaysFromTheCurrentMonth(
     selectedYear,
@@ -39,14 +34,7 @@ function Calendar() {
       selectedMonth
     );
 
-  const onCreate = (payload: any) => {
-    console.log(payload);
-  };
-
-  const { data, isLoading, isError, error } = useQuery(
-    "reminders",
-    getReminders
-  );
+  const { data, isLoading, isError } = useQuery("reminders", getReminders);
 
   const DatesInCalendar = () => {
     if (isLoading) {
@@ -55,7 +43,6 @@ function Calendar() {
     if (isError) {
       return <div>Something went wrong</div>;
     }
-    //.map((reminder: any) => { return {...reminder, date: dayjs(reminder.date, "YYYY-MM-DDTHH:mm:ss")}})
 
     const addremindersToDatesList = (
       daysList: Array<string>
@@ -64,9 +51,8 @@ function Calendar() {
         return {
           day: day,
           reminders: data?.filter(
-            (reminder: any) =>
-              reminder.date.substring(0, 10) === day
-          )
+            (reminder: any) => reminder.date.substring(0, 10) === day
+          ),
         };
       });
     };
@@ -78,8 +64,6 @@ function Calendar() {
     );
     const daysAndRemindersInTheLastWeekAfterTheLastDay =
       addremindersToDatesList(daysInTheLastWeekAfterTheLastDay);
-
-      
 
     return (
       <ol className="day-grid">
@@ -111,9 +95,7 @@ function Calendar() {
   };
 
   return (
-    <div>
-      <ModalDialog onCreate={onCreate}></ModalDialog>
-      <CalendarNavigation></CalendarNavigation>
+    <div className="">
       <ul className="weekdays">
         <li>
           <abbr title="S">Sunday</abbr>

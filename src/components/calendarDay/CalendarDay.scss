@@ -1,0 +1,11 @@
+.day {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  &_header {
+    font-size: 15px;
+  }
+}
+.day:hover {
+  cursor: pointer;
+}

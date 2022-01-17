@@ -1,0 +1,8 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  &_currentMonth {
+    font-size: 25px;
+    font-weight: 800;
+  }
+}
