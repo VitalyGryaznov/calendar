@@ -5,10 +5,9 @@ import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "react-query";
 import configureStore from "redux-mock-store";
 import dayjs from "dayjs";
-import structuredClone from "@ungap/structured-clone";
 
 const mockStore = configureStore([]);
-const component = (store) => {
+const component = (store: any) => {
   return (
     <QueryClientProvider client={new QueryClient()}>
       <Provider store={store}>
@@ -53,9 +52,10 @@ describe("ModalDialog", () => {
     store = mockStore(creatingNewReminderInitialState);
     render(component(store));
     expect(screen.getByTestId(modalDialogSelector)).toBeVisible();
+    
   });
   it("modal dialog is not displayed when showReminderModal is false in the store", () => {
-    const state = structuredClone(creatingNewReminderInitialState);
+    const state = {calendar: {...creatingNewReminderInitialState.calendar, showReminderModal: false}};
     state.calendar.showReminderModal = false;
     store = mockStore(state);
     render(component(store));
