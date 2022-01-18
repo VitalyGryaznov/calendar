@@ -1,6 +1,6 @@
 # Calendar app
 
-![alt text](https://github.com/VitalyGryaznov/calendar/blob/master/Screenshot_calendar.png)
+![alt text](https://github.com/VitalyGryaznov/calendar/blob/main/Screenshot_calendar.png)
 
 ## Backend part mock
 
